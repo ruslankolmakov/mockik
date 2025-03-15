@@ -1,0 +1,36 @@
+# Dependency directories
+node_modules/
+npm-debug.log
+
+# Coverage directory
+coverage/
+
+# Git and GitHub files
+.git
+.github
+.gitignore
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+tests/
+*.test.js
+
+# Docker files
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Other files not needed in the container
+*.md
+LICENSE
+curl-tests.sh
+run-tests.sh 
