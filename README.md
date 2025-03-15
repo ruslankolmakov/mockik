@@ -202,6 +202,27 @@ Or use the provided shell script:
 ./start.sh coverage
 ```
 
+### Curl Tests
+
+For manual testing and demonstration purposes, a curl-based test script is included:
+
+```bash
+# Make the script executable (if needed)
+chmod +x curl-tests.sh
+
+# Run the tests
+./curl-tests.sh
+```
+
+This script runs a series of curl commands to test:
+- Registering mock endpoints
+- Testing GET and POST requests
+- Custom status codes
+- Custom headers
+- Error handling
+
+It's a great way to understand how Mockik works and verify its functionality from the command line.
+
 ## Advanced Configuration
 
 ### SSL Certificates
