@@ -1,6 +1,6 @@
 {
   "name": "mockik",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Simple mock server with SSL",
   "main": "server.js",
   "scripts": {
