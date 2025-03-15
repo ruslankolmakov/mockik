@@ -57,4 +57,17 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Image digest
-        run: echo ${{ steps.build-and-push.outputs.digest }} 
+        run: echo ${{ steps.build-and-push.outputs.digest }}
+        
+      - name: Make package public
+        if: github.event_name != 'pull_request'
+        run: |
+          # Extract the package name from the repository
+          PACKAGE_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          
+          # Make the package public
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/user/packages/container/${{ github.repository_owner }}%2F${{ github.event.repository.name }}/visibility \
+            -d '{"visibility":"public"}' 
