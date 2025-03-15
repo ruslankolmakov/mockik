@@ -210,8 +210,21 @@ For manual testing and demonstration purposes, a curl-based test script is inclu
 # Make the script executable (if needed)
 chmod +x curl-tests.sh
 
-# Run the tests
+# Run the tests (make sure your server is running on port 3002)
 ./curl-tests.sh
+```
+
+Alternatively, you can use the provided run-tests.sh script which will:
+1. Start the server on port 3002
+2. Run the curl tests
+3. Stop the server when done
+
+```bash
+# Make the script executable (if needed)
+chmod +x run-tests.sh
+
+# Run the server and tests in one command
+./run-tests.sh
 ```
 
 This script runs a series of curl commands to test:
