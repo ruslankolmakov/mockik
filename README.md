@@ -9,6 +9,7 @@ Mockik is a lightweight mock server that follows the WireMock format for definin
 - 🔌 Dynamic mock registration via API
 - 🔒 HTTPS support via Nginx in Docker
 - 🐳 Docker and Docker Compose support
+- ✅ Comprehensive test suite
 
 ## Getting Started
 
@@ -118,6 +119,25 @@ This will:
 1. Build and start the Node.js application
 2. Start Nginx as a reverse proxy with SSL termination
 3. Expose the service on ports 80 (HTTP) and 443 (HTTPS)
+
+## Testing
+
+The project includes a comprehensive test suite using Jest and Supertest. To run the tests:
+
+```bash
+npm test
+```
+
+The tests cover:
+- Server functionality (API endpoints, mock registration, response handling)
+- Docker configuration validation
+- Mock definition validation
+
+To run tests with coverage report:
+
+```bash
+npm test -- --coverage
+```
 
 ## Advanced Configuration
 
