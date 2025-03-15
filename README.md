@@ -1,10 +1,10 @@
 # Mockik - Simple Mock Server
 
-Mockik is a lightweight mock server that follows the WireMock format for defining API mocks. It allows you to quickly set up mock responses for your frontend development or testing needs.
+Mockik is a lightweight mock server that uses a format similar to WireMock for defining API mocks. It allows you to quickly set up mock responses for your frontend development or testing needs.
 
 ## Features
 
-- 🔄 WireMock-compatible API format
+- 🔄 Similar to WireMock API format (partially compatible but not a full implementation)
 - 📁 Load mock definitions from JSON files
 - 🔌 Dynamic mock registration via API
 - 🔒 HTTPS support via Nginx in Docker
@@ -55,7 +55,7 @@ You can create mock definitions in two ways:
 
 #### 1. Using JSON Files
 
-Create a `mappings` directory in the project root and add JSON files with your mock definitions:
+Create a `mappings` directory in the project root and add JSON files with your mock definitions. The format is similar to WireMock but not fully compatible:
 
 ```json
 {
