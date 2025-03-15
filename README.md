@@ -37,6 +37,14 @@ Mockik is a lightweight mock server that follows the WireMock format for definin
    npm start
    ```
 
+   Or use the provided shell script:
+   ```bash
+   ./start.sh dev     # Start in development mode
+   ./start.sh docker  # Start using Docker Compose
+   ./start.sh test    # Run tests
+   ./start.sh coverage # Run tests with coverage
+   ```
+
 The server will start on port 3000.
 
 ## Using the Mock Server
@@ -115,6 +123,11 @@ The project includes Docker and Docker Compose configuration for easy deployment
 docker-compose up --build
 ```
 
+Or use the provided shell script:
+```bash
+./start.sh docker
+```
+
 This will:
 1. Build and start the Node.js application
 2. Start Nginx as a reverse proxy with SSL termination
@@ -128,6 +141,11 @@ The project includes a comprehensive test suite using Jest and Supertest. To run
 npm test
 ```
 
+Or use the provided shell script:
+```bash
+./start.sh test
+```
+
 The tests cover:
 - Server functionality (API endpoints, mock registration, response handling)
 - Docker configuration validation
@@ -136,7 +154,12 @@ The tests cover:
 To run tests with coverage report:
 
 ```bash
-npm test -- --coverage
+npm run test:coverage
+```
+
+Or use the provided shell script:
+```bash
+./start.sh coverage
 ```
 
 ## Advanced Configuration
