@@ -8,7 +8,7 @@ describe('Docker Configuration', () => {
     
     const dockerfileContent = fs.readFileSync(dockerfilePath, 'utf8');
     expect(dockerfileContent).toContain('FROM node');
-    expect(dockerfileContent).toContain('WORKDIR /app');
+    expect(dockerfileContent).toContain('WORKDIR /usr/src/app');
     expect(dockerfileContent).toContain('COPY package*.json ./');
     expect(dockerfileContent).toContain('RUN npm install');
     expect(dockerfileContent).toContain('COPY . .');

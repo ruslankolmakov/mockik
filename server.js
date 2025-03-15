@@ -15,6 +15,32 @@ app.use(express.urlencoded({ extended: true }));
 // Store for mock definitions
 const mockDefinitions = new Map();
 
+// Helper function to check if headers match
+const headersMatch = (requestHeaders, mockHeaders) => {
+    if (!mockHeaders) return true;
+    
+    for (const [key, value] of Object.entries(mockHeaders)) {
+        const headerValue = requestHeaders[key.toLowerCase()];
+        if (!headerValue || headerValue !== value) {
+            return false;
+        }
+    }
+    
+    return true;
+};
+
+// Helper function to generate a key for the mock definition
+const generateMockKey = (mock) => {
+    let key = `${mock.request.method}_${mock.request.url}`;
+    
+    // If headers are defined, include them in the key
+    if (mock.request.headers) {
+        key += `_${JSON.stringify(mock.request.headers)}`;
+    }
+    
+    return key;
+};
+
 // Load mock mappings from files in the 'mappings' directory
 const mappingsFolder = path.join(__dirname, 'mappings');
 if (fs.existsSync(mappingsFolder)) {
@@ -23,7 +49,7 @@ if (fs.existsSync(mappingsFolder)) {
             try {
                 const content = fs.readFileSync(path.join(mappingsFolder, file));
                 const mapping = JSON.parse(content);
-                const key = `${mapping.request.method}_${mapping.request.url}`;
+                const key = generateMockKey(mapping);
                 mockDefinitions.set(key, mapping);
                 console.log(`Loaded mock from file: ${file}`);
             } catch (err) {
@@ -36,25 +62,49 @@ if (fs.existsSync(mappingsFolder)) {
 // Endpoint to register new mock definitions
 app.post('/__new/', (req, res) => {
     const mock = req.body;
-    const key = `${mock.request.method}_${mock.request.url}`;
+    const key = generateMockKey(mock);
     mockDefinitions.set(key, mock);
     res.status(201).json({ status: 'Mock created' });
 });
 
 // Dynamic request handling based on mock definitions
 app.all('*', (req, res) => {
-    const key = `${req.method}_${req.path}`;
-    const mock = mockDefinitions.get(key);
-
-    if (!mock) {
+    // Find a matching mock definition
+    let matchingMock = null;
+    
+    // First try to find an exact match with headers
+    for (const [key, mock] of mockDefinitions.entries()) {
+        const methodMatches = mock.request.method === req.method;
+        const urlMatches = mock.request.url === req.path;
+        
+        if (methodMatches && urlMatches) {
+            // If the mock has headers defined, check if they match
+            if (mock.request.headers) {
+                if (headersMatch(req.headers, mock.request.headers)) {
+                    matchingMock = mock;
+                    break;
+                }
+            } else {
+                // If no headers defined in the mock, it's a match
+                matchingMock = mock;
+                break;
+            }
+        }
+    }
+    
+    if (!matchingMock) {
         return res.status(404).json({
             error: 'No matching mock definition found',
-            request: { method: req.method, path: req.path }
+            request: { 
+                method: req.method, 
+                path: req.path,
+                headers: req.headers
+            }
         });
     }
 
     // Apply response from mock definition
-    const response = mock.response;
+    const response = matchingMock.response;
     res.status(response.status || 200)
         .set(response.headers || {})
         .send(response.body);
@@ -75,4 +125,4 @@ if (require.main === module) {
 }
 
 // Export for testing
-module.exports = { app, mockDefinitions };
+module.exports = { app, mockDefinitions, headersMatch };

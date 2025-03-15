@@ -10,6 +10,7 @@ Mockik is a lightweight mock server for defining API mocks. It allows you to qui
 - 🔒 HTTPS support via Nginx in Docker
 - 🐳 Docker and Docker Compose support
 - ✅ Comprehensive test suite
+- 🔍 Request headers matching for advanced mocking scenarios
 
 ## Getting Started
 
@@ -95,7 +96,11 @@ Here's the basic structure:
 {
   "request": {
     "method": "GET|POST|PUT|DELETE|etc.",
-    "url": "/your/api/path"
+    "url": "/your/api/path",
+    "headers": {
+      "Authorization": "Bearer token123",
+      "Content-Type": "application/json"
+    }
   },
   "response": {
     "status": 200,
@@ -115,12 +120,51 @@ Here's the basic structure:
 
 - `method` (required): The HTTP method to match (GET, POST, PUT, DELETE, etc.)
 - `url` (required): The exact URL path to match (e.g., "/api/users")
+- `headers` (optional): HTTP headers to match against the incoming request
 
 #### Response Properties
 
 - `status` (optional): HTTP status code (defaults to 200 if not specified)
 - `headers` (optional): HTTP headers to include in the response
 - `body` (optional): The response body (can be any valid JSON)
+
+### Headers Matching
+
+Mockik supports matching requests based on HTTP headers. This is useful for:
+
+- API versioning (e.g., matching different responses based on `API-Version` header)
+- Authentication (e.g., returning different responses for authenticated vs. unauthenticated requests)
+- Content negotiation (e.g., different responses based on `Accept` header)
+
+Example of a mock with header matching:
+
+```json
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/users",
+    "headers": {
+      "Authorization": "Bearer token123",
+      "API-Version": "2.0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {"id": 1, "name": "John Doe", "role": "admin"},
+        {"id": 2, "name": "Jane Smith", "role": "user"}
+      ]
+    }
+  }
+}
+```
+
+With this configuration:
+- Requests to `/api/users` with the exact headers `Authorization: Bearer token123` and `API-Version: 2.0` will receive the mocked response
+- Requests missing any of these headers or with different values will receive a 404 error
+
+You can register multiple mocks for the same URL with different header combinations to simulate different API behaviors.
 
 ### Creating Mock Definitions
 
