@@ -42,7 +42,7 @@ describe('Mock Server', () => {
   });
 
   describe('API-based mock registration', () => {
-    test('should register a new mock via POST to /__admin/mappings', async () => {
+    test('should register a new mock via POST to /__new/', async () => {
       const mockDefinition = {
         request: {
           method: 'GET',
@@ -60,7 +60,7 @@ describe('Mock Server', () => {
       };
 
       const response = await request(app)
-        .post('/__admin/mappings')
+        .post('/__new/')
         .send(mockDefinition)
         .expect(201);
 
@@ -100,7 +100,7 @@ describe('Mock Server', () => {
       };
 
       await request(app)
-        .post('/__admin/mappings')
+        .post('/__new/')
         .send(mockDefinition)
         .expect(201);
 
@@ -130,7 +130,7 @@ describe('Mock Server', () => {
       };
 
       await request(app)
-        .post('/__admin/mappings')
+        .post('/__new/')
         .send(mockDefinition)
         .expect(201);
 
