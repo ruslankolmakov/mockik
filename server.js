@@ -33,8 +33,8 @@ if (fs.existsSync(mappingsFolder)) {
     });
 }
 
-// Endpoint to register new mock definitions (similar to WireMock format but not fully compatible)
-app.post('/__admin/mappings', (req, res) => {
+// Endpoint to register new mock definitions
+app.post('/__new/', (req, res) => {
     const mock = req.body;
     const key = `${mock.request.method}_${mock.request.url}`;
     mockDefinitions.set(key, mock);

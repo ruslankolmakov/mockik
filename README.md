@@ -1,10 +1,10 @@
 # Mockik - Simple Mock Server
 
-Mockik is a lightweight mock server that uses a format similar to WireMock for defining API mocks. It allows you to quickly set up mock responses for your frontend development or testing needs.
+Mockik is a lightweight mock server for defining API mocks. It allows you to quickly set up mock responses for your frontend development or testing needs.
 
 ## Features
 
-- 🔄 Similar to WireMock API format (partially compatible but not a full implementation)
+- 🔄 Simple and intuitive JSON-based mock definition format
 - 📁 Load mock definitions from JSON files
 - 🔌 Dynamic mock registration via API
 - 🔒 HTTPS support via Nginx in Docker
@@ -49,13 +49,53 @@ The server will start on port 3000.
 
 ## Using the Mock Server
 
+### Mock Definition Format
+
+Mockik uses a simple JSON format for defining mocks. Each mock definition consists of two main parts:
+
+1. **Request**: Defines the criteria for matching incoming requests
+2. **Response**: Defines the response that should be returned when a request matches
+
+Here's the basic structure:
+
+```json
+{
+  "request": {
+    "method": "GET|POST|PUT|DELETE|etc.",
+    "url": "/your/api/path"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Custom-Header": "custom-value"
+    },
+    "body": {
+      "any": "valid json",
+      "can": "be used here"
+    }
+  }
+}
+```
+
+#### Request Properties
+
+- `method` (required): The HTTP method to match (GET, POST, PUT, DELETE, etc.)
+- `url` (required): The exact URL path to match (e.g., "/api/users")
+
+#### Response Properties
+
+- `status` (optional): HTTP status code (defaults to 200 if not specified)
+- `headers` (optional): HTTP headers to include in the response
+- `body` (optional): The response body (can be any valid JSON)
+
 ### Creating Mock Definitions
 
 You can create mock definitions in two ways:
 
 #### 1. Using JSON Files
 
-Create a `mappings` directory in the project root and add JSON files with your mock definitions. The format is similar to WireMock but not fully compatible:
+Create a `mappings` directory in the project root and add JSON files with your mock definitions:
 
 ```json
 {
@@ -80,10 +120,10 @@ Create a `mappings` directory in the project root and add JSON files with your m
 
 #### 2. Using the API
 
-You can dynamically register mocks by sending a POST request to `/__admin/mappings`:
+You can dynamically register mocks by sending a POST request to `/__new/`:
 
 ```bash
-curl -X POST http://localhost:3000/__admin/mappings \
+curl -X POST http://localhost:3000/__new/ \
   -H "Content-Type: application/json" \
   -d '{
     "request": {
