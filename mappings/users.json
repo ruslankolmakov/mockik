@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/users"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "users": [
+        {"id": 1, "name": "John Doe", "email": "john@example.com"},
+        {"id": 2, "name": "Jane Smith", "email": "jane@example.com"},
+        {"id": 3, "name": "Bob Johnson", "email": "bob@example.com"}
+      ],
+      "total": 3,
+      "page": 1,
+      "limit": 10
+    }
+  }
+} 
