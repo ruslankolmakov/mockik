@@ -7,8 +7,8 @@ WORKDIR /usr/src/app
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
 
-# Use npm ci for more reliable builds
-RUN npm ci --only=production
+# Install dependencies (using npm install instead of npm ci)
+RUN npm install --production
 
 # Bundle app source
 COPY . .
