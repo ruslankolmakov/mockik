@@ -47,6 +47,39 @@ Mockik is a lightweight mock server for defining API mocks. It allows you to qui
 
 The server will start on port 3000.
 
+### Using Pre-built Docker Images
+
+Mockik is available as a pre-built Docker image from GitHub Container Registry:
+
+```bash
+# Pull the latest version
+docker pull ghcr.io/ruslankolmakov/mockik:latest
+
+# Or pull a specific version
+docker pull ghcr.io/ruslankolmakov/mockik:v0.0.3
+```
+
+Run the container:
+
+```bash
+# Run on default port 3000
+docker run -p 3000:3000 ghcr.io/ruslankolmakov/mockik:latest
+
+# Or specify a custom port
+docker run -p 8080:3000 -e PORT=3000 ghcr.io/ruslankolmakov/mockik:latest
+```
+
+Mount your own mock definitions:
+
+```bash
+docker run -p 3000:3000 -v $(pwd)/my-mocks:/usr/src/app/mappings ghcr.io/ruslankolmakov/mockik:latest
+```
+
+Available tags:
+- `latest`: The most recent build from the main branch
+- `v0.0.3`, `v0.0.2`, etc.: Specific versions
+- `0.0`: Major.minor version
+
 ## Using the Mock Server
 
 ### Mock Definition Format
@@ -157,7 +190,24 @@ curl http://localhost:3000/api/users
 
 The project includes Docker and Docker Compose configuration for easy deployment with SSL support via Nginx.
 
-### Starting with Docker Compose
+### Using Pre-built Images
+
+The easiest way to deploy Mockik is to use the pre-built images from GitHub Container Registry:
+
+```bash
+# In your docker-compose.yml
+services:
+  mockik:
+    image: ghcr.io/ruslankolmakov/mockik:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./mappings:/usr/src/app/mappings
+```
+
+### Building Locally with Docker Compose
+
+If you prefer to build the image locally:
 
 ```bash
 docker-compose up --build
