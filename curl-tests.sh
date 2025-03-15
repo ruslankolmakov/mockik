@@ -4,7 +4,7 @@
 # This script tests the functionality of the Mockik server using curl commands
 
 # Set the base URL
-BASE_URL="http://localhost:3000"
+BASE_URL="http://localhost:3002"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -137,14 +137,17 @@ fi
 
 # Test 6: Test the mock with custom headers
 echo -e "\n${YELLOW}Test 6: Test the mock with custom headers${NC}"
-HEADERS=$(curl -s -I "$BASE_URL/api/custom-headers")
-RESPONSE=$(curl -s "$BASE_URL/api/custom-headers")
+RESPONSE_WITH_HEADERS=$(curl -s -i "$BASE_URL/api/custom-headers")
+BODY=$(echo "$RESPONSE_WITH_HEADERS" | awk 'BEGIN{flag=0} /^\r?$/{flag=1; next} flag{print}')
 EXPECTED='"message":"Response with custom headers"'
 
-if [[ "$HEADERS" == *"X-Custom-Header: custom-value"* && "$HEADERS" == *"X-Rate-Limit: 100"* && "$RESPONSE" == *"$EXPECTED"* ]]; then
+# Check if the response contains the custom headers and expected body
+if [[ "$RESPONSE_WITH_HEADERS" == *"X-Custom-Header: custom-value"* && 
+      "$RESPONSE_WITH_HEADERS" == *"X-Rate-Limit: 100"* && 
+      "$BODY" == *"$EXPECTED"* ]]; then
   print_result 0 "Successfully received response with custom headers"
 else
-  print_result 1 "Failed to receive response with correct custom headers" "Headers: $HEADERS, Response: $RESPONSE"
+  print_result 1 "Failed to receive response with correct custom headers" "Response: $RESPONSE_WITH_HEADERS"
 fi
 
 # Test 7: Test non-existent endpoint
